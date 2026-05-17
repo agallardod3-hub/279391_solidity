@@ -36,4 +36,17 @@ contract Universidad279391 {
     function contarElementos() public view registrarLog() returns (uint256) {
         return alumnos.length;
     }
+
+    function inactivarElemento(uint256 _posicion) public registrarLog {
+        require(_posicion < alumnos.length, "Posicion fuera de rango");
+        alumnos[_posicion].estado = false;
+    }
+
+    function pintarElementosImpares() public view registrarLog {
+        for (uint i = 0; i < alumnos.length; i++) {
+            if (alumnos[i].id % 2 != 0) {
+                console.log("Estudiante ID impar:", alumnos[i].id, alumnos[i].nombre);
+            }
+        }
+    }
 }
