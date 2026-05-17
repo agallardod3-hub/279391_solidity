@@ -9,20 +9,31 @@ contract Universidad279391 {
         uint256 id;
         string nombre;
         string carrera;
+        bool estado;
     }
 
     Estudiante[] public alumnos;
     address public dirContrato = 0x5FD6eB55D12E759a21C09eF703fe0CBa1DC9d88D;
 
-    constructor() {
+    modifier registrarLog() {
         console.log("Ejecutado por: 279391 - Alexander Yair Gallardo Diaz");
+        _;
     }
 
-    function agregarElemento(uint256 _id, string memory _nombre, string memory _carrera) public {
-        alumnos.push(Estudiante(_id, _nombre, _carrera));
+    constructor() {
     }
 
-    function contarElementos() public view returns (uint256) {
+    function agregarElemento(uint256 _id, string memory _nombre, string memory _carrera, bool _estado) public registrarLog() {
+        
+        for (uint i = 0; i < alumnos.length; i++) {
+            require(alumnos[i].id != _id, "Un alumno con ese ID ya existe"); 
+        }
+        require(bytes(_nombre).length > 0, "El nombre no puede estar vacio");
+
+        alumnos.push(Estudiante(_id, _nombre, _carrera, _estado));
+    }
+
+    function contarElementos() public view registrarLog() returns (uint256) {
         return alumnos.length;
     }
 }
