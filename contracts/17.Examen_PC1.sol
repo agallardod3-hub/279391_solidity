@@ -12,8 +12,9 @@ contract Universidad279391 {
         bool estado;
     }
 
-    Estudiante[] public alumnos;
+    mapping(uint256 => Estudiante) public alumnos;
     address public dirContrato = 0x5FD6eB55D12E759a21C09eF703fe0CBa1DC9d88D;
+    uint256 public cantidad;
 
     modifier registrarLog() {
         console.log("Ejecutado por: 279391 - Alexander Yair Gallardo Diaz");
@@ -23,30 +24,21 @@ contract Universidad279391 {
     constructor() {
     }
 
-    function agregarElemento(uint256 _id, string memory _nombre, string memory _carrera, bool _estado) public registrarLog() {
-        
-        for (uint i = 0; i < alumnos.length; i++) {
-            require(alumnos[i].id != _id, "Un alumno con ese ID ya existe"); 
-        }
+    function agregarElemento(uint256 _id, string memory _nombre, string memory _carrera, bool _estado) public registrarLog {
+        require(alumnos[_id].id == 0, "El alumno con ese ID ya existe");
         require(bytes(_nombre).length > 0, "El nombre no puede estar vacio");
 
-        alumnos.push(Estudiante(_id, _nombre, _carrera, _estado));
+        alumnos[_id] = Estudiante(_id, _nombre, _carrera, _estado);
+        
+        cantidad++;
     }
 
-    function contarElementos() public view registrarLog() returns (uint256) {
-        return alumnos.length;
+    function inactivarElemento(uint256 _id) public registrarLog {
+        require(alumnos[_id].id != 0, "El ID no existe");
+        alumnos[_id].estado = false;
     }
 
-    function inactivarElemento(uint256 _posicion) public registrarLog {
-        require(_posicion < alumnos.length, "Posicion fuera de rango");
-        alumnos[_posicion].estado = false;
-    }
-
-    function pintarElementosImpares() public view registrarLog {
-        for (uint i = 0; i < alumnos.length; i++) {
-            if (alumnos[i].id % 2 != 0) {
-                console.log("Estudiante ID impar:", alumnos[i].id, alumnos[i].nombre);
-            }
-        }
+    function contarElementos() public view registrarLog returns (uint256) {
+        return cantidad;
     }
 }
