@@ -5,12 +5,19 @@ contract Teleton {
     constructor() {
         owner = msg.sender;
     }
+
     modifier isOwner() {
        require(msg.sender == owner, "No eres el propietario");
        _;
     }
+
     function despositar() public payable {
     }
+
+    function transferownership(address nuevoowner) public isOwner {
+    owner = nuevoowner;
+    }
+
     function retirar() public isOwner {
         payable(owner).transfer(address(this).balance);
     }
